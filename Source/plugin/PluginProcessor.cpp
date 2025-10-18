@@ -5,18 +5,22 @@
 
 // ============================================================
 // MIDI CC Definitions — explicit (fast) + introspectable (future-ready)
+// Use ACTUAL controller numbers. Your logs showed CC #4 and CC #5.
 // ============================================================
-
 enum MidiCC {
-    CC_Amplitude = 1,  // Mod wheel
-    CC_Frequency = 2,  // Arbitrary choice
-    CC_Phase     = 3   // Another example
+    CC_Amplitude = 1,  // Mod wheel (often)
+    CC_Frequency = 2,
+    CC_Phase     = 3,
+    CC_uR        = 4,  // r magnitude (Foot Controller / CC4)
+    CC_uPhi      = 5   // φ rotation  (Portamento Time / CC5)
 };
 
 static const std::unordered_map<int, const char*> ccToParamID = {
     { CC_Amplitude, "A_dB" },
     { CC_Frequency, "lambda_hz" },
-    { CC_Phase,     "phase_offset_rad" }
+    { CC_Phase,     "phase_offset_rad" },
+    { CC_uR,        "u_r_mag" },
+    { CC_uPhi,      "u_phi_rad" }
 };
 
 // ============================================================
@@ -142,13 +146,26 @@ void GmPluginAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer,
                     knobState.phase_offset_rad = norm * juce::MathConstants<float>::twoPi;
                     break;
 
+                case CC_uR:
+                    // r in [0.5 .. 2.0] as an example range
+                    knobState.u_r_mag = 0.5f + norm * 1.5f;
+                    break;
+
+                case CC_uPhi:
+                    // φ in [0 .. 2π]
+                    knobState.u_phi_rad = norm * juce::MathConstants<float>::twoPi;
+                    break;
+
                 default:
                     break;
             }
 
-            DBG("→ Updated knobState: A_dB=" << knobState.A_dB
+            DBG("→ Updated knobState: "
+                << "A_dB=" << knobState.A_dB
                 << ", λ_hz=" << knobState.lambda_hz
-                << ", phase=" << knobState.phase_offset_rad);
+                << ", phase=" << knobState.phase_offset_rad
+                << ", u_r=" << knobState.u_r_mag
+                << ", u_phi=" << knobState.u_phi_rad);
         }
     }
 
@@ -167,6 +184,10 @@ void GmPluginAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer,
     const float phaseOff = knobState.phase_offset_rad.load();
     const float AdB      = knobState.A_dB.load();
 
+    // 🔹 New complex modulation controls
+    const float uR   = knobState.u_r_mag.load();
+    const float uPhi = knobState.u_phi_rad.load();
+
     // Render
     for (int i = 0; i < numSamples; ++i)
     {
@@ -175,7 +196,7 @@ void GmPluginAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer,
         for (auto& [note, v] : voices)
         {
             const float voiceHz = baseHz * v.ratio; // per-voice pitch from global base
-            mixSample += v.osc.process(voiceHz, phaseOff, AdB);
+            mixSample += v.osc.process(voiceHz, phaseOff, AdB, uR, uPhi);
         }
 
         // write to all channels (mono -> stereo, etc.)

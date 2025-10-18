@@ -12,17 +12,27 @@ struct Oscillator {
         phase = 0.0f;
     }
 
-    /// Simple sine oscillator driven by explicit parameters.
-    inline float process(float lambda_hz, float phase_offset_rad, float A_dB) noexcept {
+    /// Sine oscillator driven by explicit parameters.
+    /// lambda_hz: base frequency (per-voice)
+    /// phase_offset_rad: global phase (host/UI)
+    /// A_dB: base amplitude in dB (host/UI)
+    /// u_r_mag: extra linear gain multiplier (complex radius r)
+    /// u_phi_rad: extra phase rotation in radians (complex angle φ)
+    inline float process(float lambda_hz,
+                         float phase_offset_rad,
+                         float A_dB,
+                         float u_r_mag,
+                         float u_phi_rad) noexcept
+    {
         // Frequency increment per sample
         const float dphi = TWO_PI * lambda_hz / sampleRate;
 
-        // Amplitude from dB
+        // Amplitude from dB, then apply complex radius r
         constexpr float LN10_OVER_20 = 0.115129254f;
-        const float amp = std::exp(A_dB * LN10_OVER_20);
+        const float amp = std::exp(A_dB * LN10_OVER_20) * u_r_mag;
 
-        // Total phase including offset
-        const float phi_total = phase + phase_offset_rad;
+        // Total phase including offsets and complex φ
+        const float phi_total = phase + phase_offset_rad + u_phi_rad;
 
         // Signal
         const float out = amp * std::cos(phi_total);
