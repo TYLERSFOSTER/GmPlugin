@@ -1,0 +1,81 @@
+# ============================================================
+# JUCE + CMake Plugin Project — .gitignore
+# ============================================================
+
+# --- CMake build artifacts ---
+build*/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+CTestTestfile.cmake
+Testing/
+CTestCostData.txt
+LastTest.log
+
+# --- JUCE-generated binaries and artefacts ---
+*_artefacts/
+*.vst3/
+*.component/
+*.aaxplugin/
+*.dll
+*.dylib
+*.so
+*.exe
+*.app
+*.pkg
+*.zip
+*.tar.gz
+
+# --- Dependency folders (e.g. Catch2, JUCE fetched via FetchContent) ---
+_deps/
+
+# --- IDE & editor junk ---
+.vscode/
+.idea/
+*.code-workspace
+*.sublime-project
+*.sublime-workspace
+*.user
+*.pro.user
+*.VC.db
+*.VC.opendb
+
+# --- macOS system files ---
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# --- OS / backup / temp files ---
+*~
+*.swp
+*.swo
+*.bak
+*.tmp
+Thumbs.db
+
+# --- Logs ---
+*.log
+
+# --- Python helper scripts cache (if any) ---
+__pycache__/
+*.pyc
+
+# --- Documentation & assets ---
+docs/
+assets/tmp/
+assets/generated/
+
+# --- Local testing outputs (safe to keep README assets) ---
+Tests/build*/
+Tests/Temporary/
+
+# ============================================================
+# Keep source, assets, and configs under version control
+# ============================================================
+
+# Allow key sources & metadata
+!Source/
+!CMakeLists.txt
+!README.md
+!LICENSE
+!assets/*.jpg

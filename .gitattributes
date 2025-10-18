@@ -1,0 +1,22 @@
+# ===================== GmPlugin .gitattributes =====================
+
+# --- Normalize line endings ---
+* text=auto eol=lf
+
+# --- Treat these as text files (so Git does proper diffs) ---
+*.cpp text
+*.h   text
+*.cmake text
+*.md  text
+*.txt text
+
+# --- Treat these as binary files (no diffs) ---
+*.wav binary
+*.png binary
+*.jpg binary
+*.npy binary
+*.hdf5 binary
+
+# --- GitHub syntax highlighting hints ---
+*.cpp linguist-language=C++
+*.h   linguist-language=C++
