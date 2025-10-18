@@ -79,3 +79,4 @@ Tests/Temporary/
 !README.md
 !LICENSE
 !assets/*.jpg
+build/
