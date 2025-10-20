@@ -41,7 +41,7 @@ struct Oscillator {
 
         // u = r * e^{i phi}
         const float c = std::cos(u_phi_rad);
-        const float s = 0.1 * std::sin(u_phi_rad * 100 * theta);
+        const float s = std::sin(u_phi_rad);
 
         // Real/Imag parts of (ln A + i theta) * u
         const float realPart = u_r_mag * ( L * c - theta * s );
