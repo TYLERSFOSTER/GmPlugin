@@ -153,7 +153,7 @@ void GmPluginAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer,
 
                 case CC_uPhi:
                     // φ in [0 .. 2π]
-                    knobState.u_phi_rad = norm * 10 * juce::MathConstants<float>::twoPi;
+                    knobState.u_phi_rad = norm * juce::MathConstants<float>::twoPi;
                     break;
 
                 default:

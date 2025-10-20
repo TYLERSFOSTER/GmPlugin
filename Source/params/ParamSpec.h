@@ -35,7 +35,7 @@ static constexpr ParamSpec PARAM_SPECS[] = {
     { ParameterID::clip_enable,     "Clip enable",         0.0f,    1.0f,     1.0f,  "bool", true,  false,  false },
     { ParameterID::phase_offset_rad,"Phase offset",        0.0f,    6.28318f, 0.0f,  "rad",  true,  true,  false },
     { ParameterID::u_r_mag,         "u r magnitude",       0.0f,   1.0f,    1.0f,  "scalar", true, true, false },
-    { ParameterID::u_phi_rad,       "u phi angle",         0.0f,   62.8318f, 0.0f,  "rad",    true, true, false },
+    { ParameterID::u_phi_rad,       "u phi angle",         0.0f,   6.28318f, 0.0f,  "rad",    true, true, false },
 };
 
 // ============================================================
